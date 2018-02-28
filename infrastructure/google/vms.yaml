@@ -1,0 +1,26 @@
+imports:
+- path: mongovm.jinja
+
+resources:
+- name: mongo-master
+  type: mongovm.jinja
+  properties:
+    name: mongo-master
+
+- name: mongo-slave1
+  type: mongovm.jinja
+  properties:
+    name: mongo-slave1
+
+- name: mongo-arbiter1
+  type: mongovm.jinja
+  properties:
+    name: mongo-arbiter1
+
+outputs:
+- name: masterIp
+  value: $(ref.mongo-master.networkInterfaces[0].accessConfigs[0].natIP)
+- name: slave1Ip
+  value: $(ref.mongo-slave1.networkInterfaces[0].accessConfigs[0].natIP)
+- name: arbiter1Ip
+  value: $(ref.mongo-arbiter1.networkInterfaces[0].accessConfigs[0].natIP)
