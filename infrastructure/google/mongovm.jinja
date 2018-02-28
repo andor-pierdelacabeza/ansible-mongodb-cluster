@@ -5,6 +5,16 @@ resources:
     zone: europe-west1-d
     # Replace [MY_PROJECT] with your project ID
     machineType: https://www.googleapis.com/compute/v1/projects/tce-sistemas-1470204626833/zones/europe-west1-d/machineTypes/f1-micro
+    metadata:
+      items:
+        - key: client
+          value: march
+        - key: app
+          value: mongodb
+        {% for item in properties["metadata"]["items"] %}
+        - key: {{ item.key }}
+          value: {{ item.value }}
+        {% endfor %}
     disks:
     - deviceName: boot
       type: PERSISTENT

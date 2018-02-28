@@ -6,16 +6,28 @@ resources:
   type: mongovm.jinja
   properties:
     name: mongo-master
+    metadata:
+      items:
+        - key: role
+          value: master
 
 - name: mongo-slave1
   type: mongovm.jinja
   properties:
     name: mongo-slave1
+    metadata:
+      items:
+        - key: role
+          value: slave
 
 - name: mongo-arbiter1
   type: mongovm.jinja
   properties:
     name: mongo-arbiter1
+    metadata:
+      items:
+        - key: role
+          value: arbiter
 
 outputs:
 - name: masterIp
