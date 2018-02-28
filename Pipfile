@@ -12,3 +12,8 @@ name = "pypi"
 [packages]
 
 ansible = "*"
+
+[requires]
+
+python_version = "3.5"
+
