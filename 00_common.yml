@@ -1,0 +1,12 @@
+---
+# This Playbook would deploy something
+- name: common
+  hosts: all
+  roles:
+  - role: common
+
+- name: Install MongoDB
+  hosts: mongo_servers
+  roles:
+  - role: mongod_base
+

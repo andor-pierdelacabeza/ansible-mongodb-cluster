@@ -1,39 +1,54 @@
 ---
 # This Playbook runs all the common plays in the deployment
-- name: Create the hosts file for all machines
-  template: src=hosts.j2 dest=/etc/hosts
-
-- name: Create the repository for 10Gen
-  copy: src=10gen.repo.j2 dest=/etc/yum.repos.d/10gen.repo
-
-- name: Create the EPEL Repository.
-  copy: src=epel.repo.j2 dest=/etc/yum.repos.d/epel.repo
-
-- name: Create the GPG key for EPEL
-  copy: src=RPM-GPG-KEY-EPEL-7 dest=/etc/pki/rpm-gpg
-
-- name: Create the mongod user
-  user: name=mongod comment="MongoD"
-
-- name: Create the data directory for the namenode metadata
-  file: path={{ mongodb_datadir_prefix }} owner=mongod group=mongod state=directory
-
-- name: Install the mongodb package
+- name: Install basic yum tools
   yum: name={{ item }} state=installed
   with_items:
-   - libselinux-python
-   - mongodb-org
-   - mongodb-org-server
-   - bc
-   - python-pip
-   - ntp
+   - deltarpm
+   - yum-cron
 
-- name: Enable NTPD
-  service: name=ntpd enabled=yes state=started
+- name: Upgrade all packages
+  yum:
+    name: '*'
+    state: latest
 
-- name: Install the latest pymongo package
-  pip: name=pymongo state=latest use_mirrors=no
+- name: Install chrony for time sync
+  yum: name={{ item }} state=installed
+  with_items:
+   - chrony
 
+- name: Enable chrony for time sync
+  service:
+    name: chronyd
+    state: started
+
+- name: Install chrony for time sync
+  yum: name={{ item }} state=installed
+  with_items:
+   - chrony
+
+- name: Install mongodb
+  yum: name={{ item }} state=installed
+  with_items:
+   - rh-mongodb34-mongodb-server
+#- name: Create the mongod user
+#  user: name=mongod comment="MongoD"
+#
+#- name: Create the data directory for the namenode metadata
+#  file: path={{ mongodb_datadir_prefix }} owner=mongod group=mongod state=directory
+#
+#- name: Install the mongodb package
+#  yum: name={{ item }} state=installed
+#  with_items:
+#   - libselinux-python
+#   - mongodb-org
+#   - mongodb-org-server
+#   - bc
+#   - python-pip
+#   - ntp
+#
+#- name: Install the latest pymongo package
+#  pip: name=pymongo state=latest use_mirrors=no
+#
 # Disable transparent_hugepages
 - name: Disable transparent_hugepages, create the profile directory for tuned (1/3)
   file: path=/etc/tuned/no-thp state=directory
