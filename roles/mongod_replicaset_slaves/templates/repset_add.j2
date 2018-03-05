@@ -1,2 +1,6 @@
 rs.add( { host: "{{ ansible_default_ipv4.address }}:{{ mongod_port }}", priority: 0, votes: 0 } );
+cfg = rs.conf();
+cfg.members[1].votes = 1;
+cfg.members[1].priority = 1;
+rs.reconfig(cfg);
 printjson(rs.status());

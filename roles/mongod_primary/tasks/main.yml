@@ -1,15 +1,4 @@
 ---
-- name: Create basic config file
-  template:
-    src: mongod.conf.j2
-    dest: /etc/opt/rh/rh-mongodb34/mongod.conf
-    owner: root
-    group: root
-    mode: "u=rw,g=r,o=r"
-  notify:
-    - Restart mongodb
-
-
 - name: Enable at boot and start mongodb
   service:
     name: rh-mongodb34-mongod
@@ -24,3 +13,11 @@
 - name: Initialize the replication set on the primary
   shell: /usr/bin/mongo /tmp/repset_init.js
   run_once: true
+
+- name: Copy sample data
+  copy:
+    src: trades.json.xz
+    dest: /etc/opt/rh/rh-mongodb34/trades.json.xz
+    owner: root
+    group: root
+    mode: "u=rw,g=r,o=r"

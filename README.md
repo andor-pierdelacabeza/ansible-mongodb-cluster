@@ -7,6 +7,4 @@ Comandos variados:
 
 - rs.status()
 - rs.printSlaveReplicationInfo()
-- cfg.members[0].votes = 1;
-- cfg.members[0].priority = 1;
-- /opt/rh/rh-mongodb34/root/bin/mongoimport --db test --collection trades --drop --file trades.json
+- /opt/rh/rh-mongodb34/root/bin/mongoimport --db test --collection trades --drop --file trades.json --writeConcern 1

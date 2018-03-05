@@ -20,23 +20,23 @@ resources:
         - key: role
           value: slave
 
-- name: mongo-slave2
-  type: mongovm.jinja
-  properties:
-    name: mongo-slave2
-    metadata:
-      items:
-        - key: role
-          value: slave
-
-- name: mongo-slave3
-  type: mongovm.jinja
-  properties:
-    name: mongo-slave3
-    metadata:
-      items:
-        - key: role
-          value: slave
+#- name: mongo-slave2
+#  type: mongovm.jinja
+#  properties:
+#    name: mongo-slave2
+#    metadata:
+#      items:
+#        - key: role
+#          value: slave
+#
+#- name: mongo-slave3
+#  type: mongovm.jinja
+#  properties:
+#    name: mongo-slave3
+#    metadata:
+#      items:
+#        - key: role
+#          value: slave
 
 - name: mongo-arbiter1
   type: mongovm.jinja
@@ -52,9 +52,9 @@ outputs:
   value: $(ref.mongo-master-t.networkInterfaces[0].accessConfigs[0].natIP)
 - name: slave1Ip
   value: $(ref.mongo-slave1-t.networkInterfaces[0].accessConfigs[0].natIP)
-- name: slave2Ip
-  value: $(ref.mongo-slave2-t.networkInterfaces[0].accessConfigs[0].natIP)
-- name: slave3Ip
-  value: $(ref.mongo-slave3-t.networkInterfaces[0].accessConfigs[0].natIP)
+#- name: slave2Ip
+#  value: $(ref.mongo-slave2-t.networkInterfaces[0].accessConfigs[0].natIP)
+#- name: slave3Ip
+#  value: $(ref.mongo-slave3-t.networkInterfaces[0].accessConfigs[0].natIP)
 - name: arbiter1Ip
   value: $(ref.mongo-arbiter1-t.networkInterfaces[0].accessConfigs[0].natIP)

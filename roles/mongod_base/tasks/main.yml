@@ -1,4 +1,45 @@
 ---
+- name: Create basic config file
+  template:
+    src: mongod.conf.j2
+    dest: /etc/opt/rh/rh-mongodb34/mongod.conf
+    owner: root
+    group: root
+    mode: "u=rw,g=r,o=r"
+
+- name: Create log path
+  file:
+    path: /var/log/mongodb
+    state: directory
+    owner: mongodb
+    group: mongodb
+    mode: "u=rwx,g=rx,o=rx"
+
+- name: Create data path
+  file:
+    path: /opt/mongodb/data
+    state: directory
+    owner: mongodb
+    group: root
+    mode: "u=rwx,g=rx"
+
+- name: Change data path context in selinux
+  shell: chcon -Rv --type=mongod_var_lib_t /opt/mongodb/
+
+- name: Create SELinux policies
+  copy:
+    src: "{{ item }}"
+    dest: /root/
+  with_items:
+    - mongodb_repl.pp
+    - mongodb_opt.pp
+
+- name: Run SELinux policies
+  shell: semodule -i "{{ item }}"
+  with_items:
+    - /root/mongodb_repl.pp
+    - /root/mongodb_opt.pp
+
 - name: Enable the mongod port.
   firewalld: port={{ mongod_port }}/tcp permanent=true state=enabled immediate=true
 
