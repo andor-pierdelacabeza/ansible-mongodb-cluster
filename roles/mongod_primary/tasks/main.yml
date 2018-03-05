@@ -1,20 +1,26 @@
 ---
-# We need to start mongo without authentication or a keyfile enabled first,
-# otherwise it's not possible to configure the users, so the first version
-# of the configuration won't have authentication enabled.
-- name: Create the unauthenticated mongodb configuration file
-  template: src=mongod_unauthenticated.conf.j2 dest=/etc/mongod.conf
+- name: Create basic config file
+  template:
+    src: mongod.conf.j2
+    dest: /etc/opt/rh/rh-mongodb34/mongod.conf
+    owner: root
+    group: root
+    mode: "u=rw,g=r,o=r"
+  notify:
+    - Restart mongodb
+
 
 - name: Enable at boot and start mongodb
-  service: name=mongod.service enabled=yes state=started
-
-- name: Add the admin user to the replicaset
-  mongodb_user: database=admin name=admin password={{ mongo_admin_pass }} login_port={{ mongod_port }} roles='root' state=present
-  ignore_errors: yes
+  service:
+    name: rh-mongodb34-mongod
+    enabled: yes
+    state: started
 
 - name: Create the file to initialize the replicaset
-  template: src=repset_init.j2 dest=/tmp/repset_init.js
+  template:
+    src: repset_init.j2
+    dest: /tmp/repset_init.js
 
 - name: Initialize the replication set on the primary
-  shell: /usr/bin/mongo -u admin -p {{ mongo_admin_pass }} --authenticationDatabase admin /tmp/repset_init.js
+  shell: /usr/bin/mongo /tmp/repset_init.js
   run_once: true

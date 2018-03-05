@@ -10,3 +10,19 @@
   roles:
   - role: mongod_base
 
+- name: Install MongoDB Master
+  hosts: mongod_primary
+  roles:
+  - role: mongod_primary
+
+- name: Add slaves
+  hosts: mongod_slaves
+  roles:
+    - mongod_replicaset
+    - mongod_replicaset_slaves
+
+- name: Add arbiters
+  hosts: mongod_arbiters
+  roles:
+    - mongod_replicaset
+    - mongod_replicaset_arbiters

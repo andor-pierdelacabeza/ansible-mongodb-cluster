@@ -21,21 +21,24 @@
     name: chronyd
     state: started
 
-- name: Install chrony for time sync
-  yum: name={{ item }} state=installed
-  with_items:
-   - chrony
-
 - name: Install mongodb
   yum: name={{ item }} state=installed
   with_items:
    - rh-mongodb34-mongodb-server
-#- name: Create the mongod user
-#  user: name=mongod comment="MongoD"
-#
-#- name: Create the data directory for the namenode metadata
-#  file: path={{ mongodb_datadir_prefix }} owner=mongod group=mongod state=directory
-#
+   - rh-mongodb34-mongo-tools
+
+- name: Copy mongo official repo
+  copy:
+    src: mongodb-org-3.4.repo
+    dest: /etc/yum.repos.d/mongodb-org-3.4.repo
+    owner: root
+    group: root
+
+- name: Install mongo-shell from official repo
+  yum:
+    name: mongodb-org-shell
+    state: installed 
+
 #- name: Install the mongodb package
 #  yum: name={{ item }} state=installed
 #  with_items:

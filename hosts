@@ -1,13 +1,15 @@
-[mongo_servers]
-mongo1 mongod_port=27017
-mongo2 mongod_port=27017
-mongo3 mongod_port=27017
+[mongo_servers:children]
+mongod_primary
+mongod_slaves
+mongod_arbiters
 
 [mongod_primary]
-mongo1 mongod_port=27017
+104.199.46.145 mongod_port=27017
 
 [mongod_slaves]
-mongo2 mongod_port=27017
+23.251.140.77 mongod_port=27017
+35.205.90.153 mongod_port=27017
+104.155.89.21 mongod_port=27017
 
 [mongod_arbiters]
-mongo3 mongod_port=27017
+35.205.44.119 mongod_port=27017
